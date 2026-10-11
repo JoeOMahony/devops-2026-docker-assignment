@@ -6,7 +6,7 @@ set -e
 # docker network rm devnet
 # docker rm -f devdbseeder
 # docker rmi devdbseederimage
-# docker volume prune -f
+# docker volume prune -f 
 
 docker network create --label joeomahony devnet
 
@@ -21,14 +21,13 @@ docker run -d --label joeomahony --network devnet --name devdb \
 # Once the message is found, the docker process for following logs is killed.
 docker logs -f devdb 2>&1 | (grep -iF --max-count=1 "[1] LOG:  database system is ready to accept connections"; pkill -f "docker logs -f devdb")
 
-docker build -t devdbseederimage --target seeder .
+docker build -t devdbseederimage --label joeomahony --target seeder .
 
 SQLITE_FILE=/app/Chinook.db
 DATABASE_URL=postgresql://devdbuser:devdbpassword@devdb:5432/musicstore
 
-docker run --rm --network devnet --name devdbseeder \
+docker run --rm --network devnet --name devdbseeder --label joeomahony \
     -e DATABASE_URL=$DATABASE_URL \
     -e SQLITE_FILE=$SQLITE_FILE \
     -v "$(pwd)/Chinook.db:/app/Chinook.db" \
     devdbseederimage
-
