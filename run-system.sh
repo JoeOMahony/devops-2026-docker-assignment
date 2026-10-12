@@ -3,9 +3,10 @@ set -e
 
 # Removal commands:
 # docker rm -f devdb
-# docker network rm devnet
 # docker rm -f devdbseeder
 # docker rmi devdbseederimage
+# docker rm -f devmcpgateway
+# docker network rm devnet
 # docker volume prune -f 
 
 docker network create --label joeomahony devnet
@@ -31,3 +32,15 @@ docker run --rm --network devnet --name devdbseeder --label joeomahony \
     -e SQLITE_FILE=$SQLITE_FILE \
     -v "$(pwd)/Chinook.db:/app/Chinook.db" \
     devdbseederimage
+
+docker run -d --name devmcpgateway --label joeomahony --network devnet \
+    -v /var/run/docker.sock:/var/run/docker.sock \
+    -v $(pwd)/mcp_config.yaml:/mcp_config.yaml \
+    -v $(pwd)/mcp_secret.env:/run/secrets/database-url \
+    docker/mcp-gateway:latest \
+    --transport=sse \
+    --secrets=/run/secrets/database-url \
+    --allow-unauthenticated \
+    --servers=cockroachdb \
+    --tools=execute_query \
+    --config=/mcp_config.yaml
