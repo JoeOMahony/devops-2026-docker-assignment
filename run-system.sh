@@ -8,6 +8,7 @@ set -e
 # docker rm -f devmcpgateway
 # docker network rm devnet
 # docker volume prune -f 
+# docker rmi devagentimage
 
 docker network create --label joeomahony devnet
 
@@ -44,3 +45,5 @@ docker run -d --name devmcpgateway --label joeomahony --network devnet \
     --servers=cockroachdb \
     --tools=execute_query \
     --config=/mcp_config.yaml
+
+docker build -t devagentimage --label joeomahony --target agent .
