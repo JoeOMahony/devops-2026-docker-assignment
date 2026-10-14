@@ -4,11 +4,12 @@ set -e
 # Removal commands:
 # docker rm -f devdb
 # docker rm -f devdbseeder
-# docker rmi devdbseederimage
 # docker rm -f devmcpgateway
-# docker network rm devnet
-# docker volume prune -f 
+# docker rm -f devagent
+# docker rmi devdbseederimage
 # docker rmi devagentimage
+# docker volume prune -f 
+# docker network rm devnet
 
 docker network create --label joeomahony devnet
 
@@ -47,3 +48,12 @@ docker run -d --name devmcpgateway --label joeomahony --network devnet \
     --config=/mcp_config.yaml
 
 docker build -t devagentimage --label joeomahony --target agent .
+
+docker run --name devagent --label joeomahony --network devnet \
+    -v $(pwd)/secret.ollama-api-key:/run/secrets/openai-api-key \
+    -e MCP_SERVER_URL=http://devmcpgateway:8811/sse \
+    -e DATABASE_DIALECT=PostgreSQL \
+    -e QUESTION='What are the top 3 albums by sales?' \
+    -e OPENAI_API_BASE_URL=https://ollama.com/v1 \
+    -e OPENAI_MODEL_NAME=gpt-oss:20b \
+    devagentimage
