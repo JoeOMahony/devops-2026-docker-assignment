@@ -6,6 +6,7 @@ set -e
 # docker rm -f devdbseeder
 # docker rm -f devmcpgateway
 # docker rm -f devagent
+# docker rmi docker/mcp-gateway
 # docker rmi devdbseederimage
 # docker rmi devagentimage
 # docker volume prune -f 
@@ -49,7 +50,8 @@ docker run -d --name devmcpgateway --label joeomahony --network devnet \
 
 docker build -t devagentimage --label joeomahony --target agent .
 
-docker run --name devagent --label joeomahony --network devnet \
+# Outputs in foreground, so can --rm without worrying about losing logs
+docker run --rm --name devagent --label joeomahony --network devnet \
     -v $(pwd)/secret.ollama-api-key:/run/secrets/openai-api-key \
     -e MCP_SERVER_URL=http://devmcpgateway:8811/sse \
     -e DATABASE_DIALECT=PostgreSQL \
