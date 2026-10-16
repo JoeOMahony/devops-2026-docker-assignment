@@ -1,9 +1,6 @@
 #!/bin/sh
 
 # -----Relevant resources to delete: (what was created on my clean machine through run-system)-----
-# ==> Containers:
-# 76e44e1185e5   docker/mcp-gateway:latest   "/docker-mcp gateway…"   About a minute ago   Up About a minute              devmcpgateway
-# a91113c725ac   postgres:18.6               "docker-entrypoint.s…"   About a minute ago   Up About a minute   5432/tcp   devdb
 # ===> Volumes:
 # local     71a2accb5dbf776bbd4855a568615d1cb1e936199c3ff8a831af508086356fcb
 # local     fbbf3a7db249924aea084f6d7eecf33f610056a284bf406a563a297a28cfedb6
@@ -15,3 +12,9 @@
 # postgres:18.6  
 # ===> Network:
 # fdac31a5fac6   devnet    bridge    local
+
+# ==> Containers to remove:
+# 76e44e1185e5   docker/mcp-gateway:latest   "/docker-mcp gateway…"   About a minute ago   Up About a minute              devmcpgateway
+# a91113c725ac   postgres:18.6               "docker-entrypoint.s…"   About a minute ago   Up About a minute   5432/tcp   devdb
+docker container stop $(docker ps -a -q --filter "label=joeomahony")
+
