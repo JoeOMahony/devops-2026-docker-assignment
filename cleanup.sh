@@ -17,4 +17,4 @@
 # 76e44e1185e5   docker/mcp-gateway:latest   "/docker-mcp gateway…"   About a minute ago   Up About a minute              devmcpgateway
 # a91113c725ac   postgres:18.6               "docker-entrypoint.s…"   About a minute ago   Up About a minute   5432/tcp   devdb
 docker container stop $(docker ps -a -q --filter "label=joeomahony")
-
+docker rm $(docker ps -a -q --filter "label=joeomahony")

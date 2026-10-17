@@ -4,7 +4,6 @@ set -e
 # Removal commands:
 # docker rm -f devdb
 # docker rm -f devdbseeder
-# docker rm -f devmcpgateway
 # docker rm -f devagent
 # docker rmi docker/mcp-gateway
 # docker rmi devdbseederimage
