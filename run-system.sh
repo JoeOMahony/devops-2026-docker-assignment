@@ -27,8 +27,8 @@ docker run --rm --network devnet --name devdbseeder --label joeomahony \
 
 docker run -d --name devmcpgateway --label joeomahony --network devnet \
     -v /var/run/docker.sock:/var/run/docker.sock:ro \
-    -v $(pwd)/mcp_config.yaml:/mcp_config.yaml:ro \
-    -v $(pwd)/mcp_secret.env:/run/secrets/database-url:ro \
+    -v "$(pwd)/mcp_config.yaml:/mcp_config.yaml:ro" \
+    -v "$(pwd)/mcp_secret.env:/run/secrets/database-url:ro" \
     docker/mcp-gateway:latest \
     --transport=sse \
     --secrets=/run/secrets/database-url \
@@ -44,7 +44,7 @@ docker build -t devagentimage --label joeomahony --target agent .
 
 # Outputs in foreground, so can --rm without worrying about losing logs
 docker run --rm --name devagent --label joeomahony --network devnet \
-    -v $(pwd)/secret.ollama-api-key:/run/secrets/openai-api-key:ro \
+    -v "$(pwd)/secret.ollama-api-key:/run/secrets/openai-api-key:ro" \
     -e MCP_SERVER_URL=http://devmcpgateway:8811/sse \
     -e DATABASE_DIALECT=PostgreSQL \
     -e QUESTION='What are the top 3 albums by sales?' \
