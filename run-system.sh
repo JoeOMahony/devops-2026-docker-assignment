@@ -17,7 +17,7 @@ docker logs -f devdb 2>&1 | (grep -iF --max-count=1 "[1] LOG:  database system i
 docker build -t devdbseederimage --label joeomahony --target seeder .
 
 SQLITE_FILE=/app/Chinook.db
-DATABASE_URL=postgresql://devdbuser:devdbpassword@devdb:5432/musicstore
+DATABASE_URL=postgres://devdbuser:devdbpassword@devdb:5432/musicstore
 
 docker run --rm --network devnet --name devdbseeder --label joeomahony \
     -e DATABASE_URL=$DATABASE_URL \
